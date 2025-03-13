@@ -1,0 +1,13 @@
+event_analytics:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      project: "{{ env_var('BQ_PROJECT') }}"
+      dataset: "{{ env_var('BQ_DATASET') }}"
+      threads: 4
+      keyfile: /opt/airflow/keys/gcp_keys.json
+      timeout_seconds: 300
+      location: asia-southeast1
+      priority: interactive

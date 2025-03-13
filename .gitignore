@@ -1,0 +1,12 @@
+node_modules/
+.env
+.DS_Store
+production_postgress/pgdata
+production_airflow/Dockerfile
+production_airflow/keys
+production_airflow/airflow-logs
+production_airflow/scripts
+production_airflow/dags/__pycache__
+production_airflow/dbt/logs
+production_airflow/dbt/target
+production_airflow/dbt/.user.yml

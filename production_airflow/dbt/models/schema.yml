@@ -1,0 +1,35 @@
+version: 2
+
+sources:
+  - name: raw
+    database: "{{ env_var('BQ_PROJECT') }}"  # ini akan mengambil nilai dari env var BQ_PROJECT
+    schema: "{{ env_var('BQ_DATASET') }}"    # ini akan mengambil nilai dari env var BQ_DATASET
+    tables:
+      - name: attendees
+        columns:
+          - name: attendee_id
+          - name: attendee_name
+          - name: email
+          - name: phone
+          - name: date_of_birth
+          - name: address
+          - name: created_at
+      
+      - name: events
+        columns:
+          - name: event_id
+          - name: event_name
+          - name: location
+          - name: duration
+          - name: fee
+          - name: event_date
+          - name: created_at
+
+      - name: registrations
+        columns:
+          - name: registration_id
+          - name: attendee_id
+          - name: event_id
+          - name: registration_date
+          - name: payment_status
+          - name: created_at

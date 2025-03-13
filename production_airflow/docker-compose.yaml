@@ -1,0 +1,60 @@
+version: "2.1"
+services:
+  scheduler:
+    container_name: prod-airflow-scheduler
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure
+    command: scheduler
+    entrypoint: ./scripts/airflow-entrypoint.sh
+    env_file:
+      - .env
+    ports:
+      - "8793:8793"
+    volumes:
+      - ./keys:/opt/airflow/keys
+      - ./dags:/opt/airflow/dags
+      - ./scripts:/opt/airflow/scripts
+      - ./dbt:/opt/airflow/dbt  # Add DBT directory
+      - ./.dbt:/home/airflow/.dbt  # Add DBT profiles directory
+      - ./data:/opt/airflow/data 
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "[ -f /usr/local/airflow/airflow-webserver.pid ]"
+        ]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+  webserver:
+    container_name: prod-airflow-webserver
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: webserver
+    restart: always
+    command: webserver
+    env_file:
+      - .env
+    volumes:
+      - ./keys:/opt/airflow/keys
+      - ./dags:/opt/airflow/dags
+      - ./scripts:/opt/airflow/scripts
+      - ./dbt:/opt/airflow/dbt  # Add DBT directory
+      - ./.dbt:/home/airflow/.dbt  # Add DBT profiles directory
+      - ./data:/opt/airflow/data 
+    ports:
+      - "8080:8080"
+    entrypoint: ./scripts/airflow-entrypoint.sh
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "[ -f /usr/local/airflow/airflow-webserver.pid ]"
+        ]
+      interval: 30s
+      timeout: 30s
+      retries: 32

@@ -1,0 +1,30 @@
+name: 'event_analytics'
+version: '1.0.0'
+config-version: 2
+
+profile: 'event_analytics'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+clean-targets:
+    - "target"
+    - "dbt_packages"
+    - "logs"
+
+models:
+  event_analytics:
+    preparation:
+      +materialized: view
+      +schema: preparation
+    dim_fact:
+      +materialized: table
+      +schema: dim_fact
+    mart:
+      +materialized: table
+      +schema: mart
