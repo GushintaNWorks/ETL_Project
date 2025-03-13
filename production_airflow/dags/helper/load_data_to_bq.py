@@ -1,72 +1,3 @@
-# from google.cloud import bigquery
-# from google.cloud.exceptions import NotFound
-# import os
-
-# BQ_PROJECT = "purwadika"
-# BQ_DATASET = "shinta_eo_capstone3"
-
-# # Path ke file service account key JSON
-# GCP_SERVICE_ACCOUNT_KEY = '/opt/airflow/keys/gcp_keys.json'
-
-# # Pastikan kredensial GCP di-load dari file key JSON
-# os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = GCP_SERVICE_ACCOUNT_KEY
-
-# # --- Fungsi Membuat Dataset BigQuery jika belum ada ---
-# def create_bigquery_dataset():
-#     client = bigquery.Client(project=BQ_PROJECT)
-#     dataset_ref = client.dataset(BQ_DATASET)
-
-#     try:
-#         client.get_dataset(dataset_ref)
-#         print(f"Dataset {BQ_DATASET} sudah ada.")
-#     except NotFound:
-#         dataset = bigquery.Dataset(dataset_ref)
-#         dataset.location = "asia-southeast1"
-#         client.create_dataset(dataset)
-#         print(f"Dataset {BQ_DATASET} telah dibuat.")
-
-# # --- Fungsi Load ke Staging BigQuery ---
-# def load_to_staging_area_bigquery(table_name, **kwargs):
-#     ti = kwargs['ti']
-#     extracted_data = ti.xcom_pull(task_ids='extract_postgres_data', key='extracted_data')
-#     df = extracted_data.get(table_name)
-
-#     if df is not None and not df.empty:
-#         client = bigquery.Client(project=BQ_PROJECT)
-#         table_id = f"{BQ_PROJECT}.{BQ_DATASET}.stg_{table_name}"
-        
-#         job_config = bigquery.LoadJobConfig(
-#             write_disposition=bigquery.WriteDisposition.WRITE_TRUNCATE,
-#             time_partitioning=bigquery.TimePartitioning(
-#                 type_=bigquery.TimePartitioningType.DAY,
-#                 field="created_at"
-#             ),
-#         )
-
-#         print(f"Loading {len(df)} rows into BigQuery staging table: {table_id}")
-#         job = client.load_table_from_dataframe(df, table_id, job_config=job_config)
-#         job.result()
-
-#         print(f"Loaded {len(df)} rows into {table_id}")
-
-# # --- Fungsi Memindahkan Data dari Staging ke Production ---
-# def move_data_from_staging_to_production(table_name, **kwargs):
-#     client = bigquery.Client(project=BQ_PROJECT)
-#     staging_table_id = f"{BQ_PROJECT}.{BQ_DATASET}.stg_{table_name}"
-#     production_table_id = f"{BQ_PROJECT}.{BQ_DATASET}.{table_name}"
-
-#     query = f"""
-#         CREATE OR REPLACE TABLE `{production_table_id}` AS
-#         SELECT DISTINCT *
-#         FROM `{staging_table_id}`
-#     """
-
-#     print(f"Moving data from {staging_table_id} to {production_table_id} with deduplication")
-#     query_job = client.query(query)
-#     query_job.result()
-
-#     print(f"Data moved to {production_table_id} successfully")
-
 from google.cloud import bigquery
 from google.cloud.exceptions import NotFound
 import os
@@ -75,12 +6,12 @@ import pandas as pd
 BQ_PROJECT = os.environ.get("BQ_PROJECT")
 BQ_DATASET = os.environ.get("BQ_DATASET")
 
-# Path ke file service account key JSON
-GCP_SERVICE_ACCOUNT_KEY = '/opt/airflow/keys/gcp_keys.json'
-DATA_DIR = "/opt/airflow/data/"  # Direktori penyimpanan file JSON
-BATCH_SIZE = 100000  # Batch size untuk upload ke BigQuery
 
-# Load kredensial GCP
+GCP_SERVICE_ACCOUNT_KEY = '/opt/airflow/keys/gcp_keys.json'
+DATA_DIR = "/opt/airflow/data/"  
+BATCH_SIZE = 100000  
+
+
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = GCP_SERVICE_ACCOUNT_KEY
 
 def create_bigquery_dataset():

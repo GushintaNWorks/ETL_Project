@@ -27,7 +27,7 @@ def scrape_adapundi():
     """
     driver = None
     try:
-        # Set up Chrome options
+        
         options = webdriver.ChromeOptions()
         options.add_argument("--headless")
         options.add_argument("--disable-gpu")
@@ -38,23 +38,23 @@ def scrape_adapundi():
         options.add_argument('--disable-infobars')
         options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36')
         
-        # Initialize driver
+        
         driver = webdriver.Chrome(options=options)
         
-        # Navigate to website
+        
         url = 'https://www.adapundi.com/'
         driver.get(url)
-        time.sleep(5)  # Initial wait for page load
+        time.sleep(5)  
         
-        # Scroll down gradually to load all elements
+        
         for _ in range(9):
             driver.execute_script("window.scrollBy(0, 300)")
             time.sleep(2)
         
-        # Get page source and create BeautifulSoup object
+        
         soup = BeautifulSoup(driver.page_source, "html.parser")
         
-        # Extract data using the specific class names
+        
         items = soup.find_all('div', class_='col-md-3 col-12')
         
         if not items:
@@ -111,18 +111,18 @@ def scrape_adapundi():
             except Exception as e:
                 print(f"Error closing driver: {e}")
 
-# Create the DAG
+
 dag = DAG(
     'adapundi_scraping',
     default_args=default_args,
     description='Scrape statistics from Adapundi website daily',
-    schedule_interval='0 0 * * *',  # Run daily at midnight
+    schedule_interval='0 0 * * *', 
     start_date=datetime(2024, 2, 6),
     catchup=False,
     max_active_runs=1,
 )
 
-# Define tasks
+
 scrape_task = PythonOperator(
     task_id='scrape_adapundi_task',
     python_callable=scrape_adapundi,

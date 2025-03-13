@@ -12,17 +12,17 @@ from helper.load_data_to_bq import (
     move_data_from_staging_to_production
 )
 
-# Konstanta
+
 TABLES = ["attendees", "events", "registrations"]
-DATA_DIR = "/opt/airflow/data/"  # Direktori penyimpanan sementara
+DATA_DIR = "/opt/airflow/data/"  
 BQ_PROJECT = os.environ.get("BQ_PROJECT")
 BQ_DATASET = os.environ.get("BQ_DATASET")
 
-# Path ke file service account key JSON
-GCP_SERVICE_ACCOUNT_KEY = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
-#os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = GCP_SERVICE_ACCOUNT_KEY
 
-# Konfigurasi Primary Key dan Kolom per Tabel
+GCP_SERVICE_ACCOUNT_KEY = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
+
+
+
 TABLE_CONFIG = {
     "attendees": {
         "primary_keys": ["attendee_id"],
@@ -38,7 +38,7 @@ TABLE_CONFIG = {
     }
 }
 
-# --- Definisi DAG ---
+
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
@@ -55,7 +55,7 @@ with DAG(
     catchup=False
 ) as dag:
 
-    # Task membuat dataset BigQuery jika belum ada
+    
     create_dataset_task = PythonOperator(
         task_id="create_dataset",
         python_callable=create_bigquery_dataset,
@@ -65,13 +65,13 @@ with DAG(
     for table, config in TABLE_CONFIG.items():
         with TaskGroup(group_id=table) as table_group:
             
-            # Task Ekstraksi Data dari PostgreSQL dan simpan ke file JSON
+            
             extract_task = PythonOperator(
                 task_id=f'extract_{table}',
                 python_callable=extract_postgres_data,
             )
 
-            # Task Load Data ke Staging BigQuery
+            
             load_to_staging_task = PythonOperator(
                 task_id=f'load_to_staging_{table}',
                 python_callable=load_to_bigquery_in_batches,
@@ -84,7 +84,7 @@ with DAG(
                 },
             )
 
-            # Task Pindah Data ke Production BigQuery
+            
             move_to_production_task = PythonOperator(
                 task_id=f'move_to_production_{table}',
                 python_callable=move_data_from_staging_to_production,

@@ -4,12 +4,12 @@ import os
 from helper.db_connection import get_postgres_engine
 
 TABLES = ["attendees", "events", "registrations"]
-DATA_DIR = "/opt/airflow/data/"  # Direktori penyimpanan sementara
+DATA_DIR = "/opt/airflow/data/"  
 
-# Pastikan direktori penyimpanan ada
+
 os.makedirs(DATA_DIR, exist_ok=True)
 
-# --- Fungsi Extract Data ---
+
 def extract_postgres_data():
     yesterday = (datetime.now() - timedelta(days=0)).strftime('%Y-%m-%d')
     engine = get_postgres_engine()

@@ -7,13 +7,13 @@ import os
 from dotenv import load_dotenv
 
 
-# Load environment variables
+
 load_dotenv()
 
-# Setup Logging
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Fungsi untuk mendapatkan koneksi database secara aman
+
 def get_db_connection():
     """Membuka koneksi ke database PostgreSQL menggunakan environment variables."""
     try:
@@ -31,7 +31,7 @@ def get_db_connection():
         raise
 
 
-# --- Konfigurasi Koneksi ---
+
 POSTGRES_CONFIG = {
             "database":os.environ.get("DB_NAME"),
             "user":os.environ.get("DB_USER"),
@@ -40,7 +40,7 @@ POSTGRES_CONFIG = {
             "port":os.environ.get("DB_PORT")
 }
 
-# --- Fungsi Koneksi Database ---
+
 def get_postgres_engine():
     url = f"postgresql+psycopg2://{POSTGRES_CONFIG['user']}:{POSTGRES_CONFIG['password']}@{POSTGRES_CONFIG['host']}:{POSTGRES_CONFIG['port']}/{POSTGRES_CONFIG['database']}"
     return create_engine(url)

@@ -16,7 +16,7 @@ SELECT
     location,
     duration,
     fee,
-    DATE(event_date) AS event_date, -- Konversi eksplisit ke DATE
+    DATE(event_date) AS event_date,
     EXTRACT(YEAR FROM DATE(event_date)) AS event_year,
     created_at,
     TIMESTAMP_TRUNC(created_at, DAY) AS created_date

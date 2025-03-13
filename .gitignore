@@ -7,6 +7,7 @@ production_airflow/keys
 production_airflow/airflow-logs
 production_airflow/scripts
 production_airflow/dags/__pycache__
+production_airflow/dags/helper/__pycache__
 production_airflow/dbt/logs
 production_airflow/dbt/target
 production_airflow/dbt/.user.yml

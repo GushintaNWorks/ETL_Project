@@ -1,4 +1,4 @@
-version: "2.1"
+version: "3.8"
 services:
   scheduler:
     container_name: prod-airflow-scheduler
@@ -16,8 +16,8 @@ services:
       - ./keys:/opt/airflow/keys
       - ./dags:/opt/airflow/dags
       - ./scripts:/opt/airflow/scripts
-      - ./dbt:/opt/airflow/dbt  # Add DBT directory
-      - ./.dbt:/home/airflow/.dbt  # Add DBT profiles directory
+      - ./dbt:/opt/airflow/dbt  
+      - ./.dbt:/home/airflow/.dbt 
       - ./data:/opt/airflow/data 
     healthcheck:
       test:
@@ -43,8 +43,8 @@ services:
       - ./keys:/opt/airflow/keys
       - ./dags:/opt/airflow/dags
       - ./scripts:/opt/airflow/scripts
-      - ./dbt:/opt/airflow/dbt  # Add DBT directory
-      - ./.dbt:/home/airflow/.dbt  # Add DBT profiles directory
+      - ./dbt:/opt/airflow/dbt  
+      - ./.dbt:/home/airflow/.dbt  
       - ./data:/opt/airflow/data 
     ports:
       - "8080:8080"

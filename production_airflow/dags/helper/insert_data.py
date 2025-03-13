@@ -9,15 +9,15 @@ from faker import Faker
 from psycopg2 import OperationalError
 from helper.db_connection import get_db_connection
 
-# Load environment variables
+
 load_dotenv()
 
-# Setup Logging
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 fake = Faker()
 
-# Fungsi untuk mengambil data dari API
+
 API_ENDPOINT = "https://randomuser.me/api/"
 
 def retrieve_user_data(api_url=API_ENDPOINT) -> dict:
@@ -137,13 +137,13 @@ def insert_registrations():
             event_id = random.choice(list(event_dict.keys()))
             event_date = event_dict[event_id]
 
-            # Jika event_date belum dalam bentuk datetime, pastikan menggunakan parsing
+            
             if isinstance(event_date, str):
                 event_date_dt = datetime.strptime(event_date, "%Y-%m-%d")
             else:
-                event_date_dt = event_date  # Jika sudah datetime, langsung gunakan
+                event_date_dt = event_date  
 
-            # Calculate registration_date (7-14 days before event_date)
+            
             registration_date_dt = event_date_dt - timedelta(days=random.randint(7, 14))
             registration_date = registration_date_dt.strftime("%Y-%m-%d %H:%M:%S")
 
